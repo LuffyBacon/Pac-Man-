@@ -514,7 +514,10 @@
 
   function render(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    drawMaze(); drawFruit(); ghosts.forEach(drawGhost); drawPac();
+    drawMaze();
+    drawFruit();
+    if (ghosts && Array.isArray(ghosts)) ghosts.forEach(drawGhost);
+    if (pac) drawPac();
   }
 
   // ---------------------- Loop ----------------------
@@ -552,7 +555,11 @@
   }
 
   // Boot
-  updateHUD(); requestAnimationFrame(loop); requestAnimationFrame(drawPoster);
+  updateHUD();
+  // Prepare entities so the first render doesn't crash before Play
+  resetEntities();
+  requestAnimationFrame(loop);
+  requestAnimationFrame(drawPoster);
 
   </script>
 </body>
