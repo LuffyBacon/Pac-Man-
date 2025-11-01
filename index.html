@@ -301,6 +301,9 @@
 
   // Boot
   updateHUD(); resetEntities(); requestAnimationFrame(loop); requestAnimationFrame(drawPoster);
+  $('#btnStart').onclick=()=>{ show('game'); startGame(); };
+$('#frontPlay').onclick=()=>{ show('game'); startGame(); };
+
   </script>
 </body>
 </html>
