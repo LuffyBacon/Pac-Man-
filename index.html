@@ -305,5 +305,49 @@
 $('#frontPlay').onclick=()=>{ show('game'); startGame(); };
 
   </script>
+  <script>
+/* Play Button Fixer — bind after DOM is ready and force-show the game screen */
+window.addEventListener('DOMContentLoaded', () => {
+  const $$ = s => document.querySelector(s);
+  const front = $$('#front');
+  const modes = $$('#modeSelect');
+  const game  = $$('#gamePane');
+
+  // generic screen switch (works even if your own show() isn't defined)
+  function forceShowGame() {
+    if (front) front.classList.remove('active');
+    if (modes) modes.classList.remove('active');
+    if (game)  game.classList.add('active');
+  }
+
+  function onPlayClick(e) {
+    e?.preventDefault?.();
+    console.log('[Pac-Man] Play clicked');
+    // If your game code already defined startGame(), use it
+    if (typeof window.startGame === 'function') {
+      try { window.startGame(); } catch (err) { console.error('startGame error:', err); }
+    }
+    // Ensure the game screen is visible no matter what
+    forceShowGame();
+    // Try starting BGM if your audio helper exists
+    if (window.Audio && typeof window.Audio.startBGM === 'function') {
+      try { window.Audio.startBGM(); } catch {}
+    }
+  }
+
+  // Bind to all play buttons (header, front page, mode select)
+  ['#btnStart', '#frontPlay', '#modePlay'].forEach(sel => {
+    const btn = document.querySelector(sel);
+    if (btn) {
+      btn.addEventListener('click', onPlayClick);
+      // Make sure it's a plain button, not a submit that might reload
+      if (!btn.hasAttribute('type')) btn.setAttribute('type', 'button');
+    } else {
+      console.warn(`[Pac-Man] Button not found: ${sel}`);
+    }
+  });
+});
+</script>
+
 </body>
 </html>
